@@ -1,0 +1,27 @@
+<view class="page">
+  <view class="analytics-header">
+    <view class="analytics-title">行为记录（埋点）</view>
+    <view class="analytics-sub">本机记录关键行为，用于后续分析两人互动</view>
+  </view>
+
+  <block wx:if="{{empty}}">
+    <view class="empty">
+      <view class="empty-emoji">📊</view>
+      <view class="empty-text">还没有行为记录</view>
+      <view class="empty-tip">绑定 CP、完成任务、生成卡片等动作会自动记录</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="event-item" wx:for="{{events}}" wx:key="type">
+      <view class="event-main">
+        <text class="event-label">{{item.label}}</text>
+        <text class="event-detail">{{item.detail}}</text>
+      </view>
+      <text class="event-time">{{item.time}}</text>
+    </view>
+    <button class="btn-ghost" bindtap="clear">清空记录</button>
+  </block>
+
+  <button class="btn-ghost" bindtap="goBack">返回</button>
+</view>

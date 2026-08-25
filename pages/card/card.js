@@ -1,4 +1,4 @@
-const { getTaskById, getCP, saveTask } = require('../../utils/store');
+const { getTaskById, getCP, saveTask, logEvent } = require('../../utils/store');
 const { PRIVACY_OPTIONS } = require('../../utils/constants');
 
 function loveDays(createdAt) {
@@ -42,16 +42,19 @@ Page({
     task.cardGenerated = true;
     task.archived = true;
     saveTask(task);
+    logEvent('card_generated', { id: task.id, name: task.name, quote: task.cardQuote, privacy: task.cardPrivacy });
     wx.showToast({ title: '已归档私密纪念册', icon: 'success' });
     setTimeout(() => wx.navigateBack(), 900);
   },
   onShareAppMessage() {
+    logEvent('share', { type: 'appMessage', name: this.data.task.name });
     return {
       title: this.data.cp.selfNick + ' 和 ' + this.data.cp.partnerNick + ' 完成了「' + this.data.task.name + '」',
       path: '/pages/index/index'
     };
   },
   onShareTimeline() {
+    logEvent('share', { type: 'timeline', name: this.data.task.name });
     return {
       title: '我们的 CP 纪念卡 💕',
       query: ''

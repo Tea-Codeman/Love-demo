@@ -4,6 +4,7 @@
 const CP_KEY = 'cp_info';
 const TASKS_KEY = 'cp_tasks';
 const REMINDERS_KEY = 'cp_reminders';
+const EVENTS_KEY = 'cp_events';
 const { TASK_TEMPLATES } = require('./constants');
 
 function getCP() {
@@ -97,6 +98,23 @@ function clearReminders() {
   wx.removeStorageSync(REMINDERS_KEY);
 }
 
+// ---------------- 埋点（PR-10，本机模拟） ----------------
+// event: { type, payload, at }
+function logEvent(type, payload) {
+  const list = getEvents();
+  list.push({ type, payload: payload || {}, at: new Date().toISOString() });
+  wx.setStorageSync(EVENTS_KEY, list);
+  return list[list.length - 1];
+}
+
+function getEvents() {
+  return wx.getStorageSync(EVENTS_KEY) || [];
+}
+
+function clearEvents() {
+  wx.removeStorageSync(EVENTS_KEY);
+}
+
 module.exports = {
   getCP,
   setCP,
@@ -109,5 +127,8 @@ module.exports = {
   getReminderByTask,
   addReminder,
   respondReminder,
-  clearReminders
+  clearReminders,
+  logEvent,
+  getEvents,
+  clearEvents
 };

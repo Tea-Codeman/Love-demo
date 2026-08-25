@@ -1,4 +1,4 @@
-const { getTaskById, saveTask, getReminderByTask, addReminder, respondReminder } = require('../../utils/store');
+const { getTaskById, saveTask, getReminderByTask, addReminder, respondReminder, logEvent } = require('../../utils/store');
 
 Page({
   data: {
@@ -51,6 +51,7 @@ Page({
     saveTask(task);
     this.setData({ task, bothDone: task.aDone && task.bDone });
     if (task.progress === 100) {
+      logEvent('task_complete', { id: task.id, name: task.name });
       wx.showToast({ title: '任务 100% 完成！', icon: 'success' });
     } else if (task.progress === 50) {
       wx.showToast({ title: '等待 TA 的回应…', icon: 'none' });
@@ -63,6 +64,7 @@ Page({
       return;
     }
     addReminder(task.id);
+    logEvent('remind', { id: task.id, name: task.name });
     this.setData({ reminded: true });
     wx.showToast({ title: '已提醒 TA 💌', icon: 'none' });
   },

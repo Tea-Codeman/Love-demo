@@ -6,7 +6,8 @@
     "pages/task-detail/task-detail",
     "pages/complete/complete",
     "pages/card/card",
-    "pages/album/album"
+    "pages/album/album",
+    "pages/analytics/analytics"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ff6b81",

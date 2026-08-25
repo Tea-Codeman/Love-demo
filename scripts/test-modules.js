@@ -267,6 +267,42 @@ test('解除绑定后提醒被清空', () => {
   eq(wx.getStorageSync('cp_reminders'), '', 'cp_reminders 应被清除');
 });
 
+// ---------------- M9 埋点 ----------------
+moduleStart('M9 埋点 (utils/store + pages/analytics)');
+resetStorage();
+test('关键动作写入事件：绑定/完成/奖励/生成卡片/分享', () => {
+  bindWithNames('小明', '小红');
+  const detail = loadPage(P('pages/task-detail/task-detail.js'));
+  detail.onLoad({ id: 't_goodnight' });
+  detail.onAInput({ detail: { value: '晚安' } }); detail.completeA();
+  detail.onBInput({ detail: { value: '好梦' } }); detail.completeB(); // 100% -> task_complete
+  loadPage(P('pages/complete/complete.js')).onLoad({ id: 't_goodnight' }); // reward
+  const card = loadPage(P('pages/card/card.js'));
+  card.onLoad({ id: 't_goodnight' });
+  card.onQuoteInput({ detail: { value: '纪念' } });
+  card.finish(); // card_generated
+  card.onShareAppMessage(); // share
+  const events = wx.getStorageSync('cp_events');
+  const types = events.map(e => e.type);
+  ok(types.includes('cp_bind'), '应有 cp_bind');
+  ok(types.includes('task_complete'), '应有 task_complete');
+  ok(types.includes('reward'), '应有 reward');
+  ok(types.includes('card_generated'), '应有 card_generated');
+  ok(types.includes('share'), '应有 share');
+});
+test('行为记录页倒序读取，最新在前', () => {
+  const a = loadPage(P('pages/analytics/analytics.js'));
+  a.onShow();
+  ok(a.data.events.length >= 5, '应读取到多条事件');
+  eq(a.data.events[0].type, 'share', '倒序第一条应为最近一次 share');
+});
+test('清空事件后列表为空', () => {
+  const a = loadPage(P('pages/analytics/analytics.js'));
+  a.clear();
+  eq(wx.getStorageSync('cp_events'), '', '事件应被清空');
+  eq(a.data.empty, true);
+});
+
 // ---------------- 汇总 ----------------
 console.log('\n========================================');
 console.log('通过 ' + pass + ' 项，失败 ' + fail + ' 项');

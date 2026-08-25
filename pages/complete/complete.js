@@ -1,4 +1,4 @@
-const { getTaskById, saveTask, getCP, setCP } = require('../../utils/store');
+const { getTaskById, saveTask, getCP, setCP, logEvent } = require('../../utils/store');
 const app = getApp();
 
 Page({
@@ -17,6 +17,7 @@ Page({
       setCP(cp);
       task.rewardGiven = true;
       saveTask(task);
+      logEvent('reward', { intimacy: task.reward.intimacy, growth: task.reward.growth });
       app.globalData.cp = cp;
     }
     this.setData({ task, intimacy: cp.intimacy, growth: cp.growth });

@@ -33,6 +33,9 @@ Page({
   goAlbum() {
     wx.navigateTo({ url: '/pages/album/album' });
   },
+  goAnalytics() {
+    wx.navigateTo({ url: '/pages/analytics/analytics' });
+  },
   unbind() {
     wx.showModal({
       title: '解除 CP 关系',

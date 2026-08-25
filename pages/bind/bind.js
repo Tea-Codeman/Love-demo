@@ -1,4 +1,4 @@
-const { setCP } = require('../../utils/store');
+const { setCP, logEvent } = require('../../utils/store');
 const app = getApp();
 
 Page({
@@ -25,6 +25,7 @@ Page({
     };
     setCP(cp);
     app.globalData.cp = cp;
+    logEvent('cp_bind', { selfNick, partnerNick });
     wx.showToast({ title: 'CP 已绑定', icon: 'success' });
     setTimeout(() => wx.navigateBack(), 800);
   }
