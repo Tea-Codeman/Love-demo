@@ -197,6 +197,36 @@ test('分享配置包含双方昵称与任务名', () => {
   ok(msg.title.indexOf('今日晚安打卡') >= 0, '分享标题含任务名');
 });
 
+// ---------------- M7 私密纪念册 ----------------
+moduleStart('M7 私密纪念册 (pages/album)');
+resetStorage();
+test('未归档时纪念册列表为空', () => {
+  bindWithNames('小明', '小红');
+  const p = loadPage(P('pages/album/album.js'));
+  p.onShow();
+  eq(p.data.cards.length, 0, '无归档卡片时应为空');
+});
+test('完成任务并归档后，纪念册出现该卡片', () => {
+  const detail = loadPage(P('pages/task-detail/task-detail.js'));
+  detail.onLoad({ id: 't_goodnight' });
+  detail.onAInput({ detail: { value: '晚安' } }); detail.completeA();
+  detail.onBInput({ detail: { value: '好梦' } }); detail.completeB();
+  loadPage(P('pages/complete/complete.js')).onLoad({ id: 't_goodnight' });
+  const card = loadPage(P('pages/card/card.js'));
+  card.onLoad({ id: 't_goodnight' });
+  card.onQuoteInput({ detail: { value: '我们的纪念' } });
+  card.finish();
+  const album = loadPage(P('pages/album/album.js'));
+  album.onShow();
+  eq(album.data.cards.length, 1, '应有一张归档卡片');
+  eq(album.data.cards[0].quote, '我们的纪念');
+  eq(album.data.cards[0].privacy, '仅情侣可见');
+  eq(album.data.cards[0].aContent, '晚安');
+  eq(album.data.cards[0].bContent, '好梦');
+  eq(album.data.cards[0].aNick, '小明');
+  eq(album.data.cards[0].bNick, '小红');
+});
+
 // ---------------- 汇总 ----------------
 console.log('\n========================================');
 console.log('通过 ' + pass + ' 项，失败 ' + fail + ' 项');

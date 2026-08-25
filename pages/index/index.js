@@ -30,6 +30,9 @@ Page({
   goTasks() {
     wx.navigateTo({ url: '/pages/tasks/tasks' });
   },
+  goAlbum() {
+    wx.navigateTo({ url: '/pages/album/album' });
+  },
   unbind() {
     wx.showModal({
       title: '解除 CP 关系',

@@ -1,0 +1,36 @@
+<view class="page">
+  <view class="album-header">
+    <view class="album-title">我们的私密纪念册</view>
+    <view class="album-sub">一起完成的每一个小任务，都值得被收藏</view>
+  </view>
+
+  <block wx:if="{{cards.length === 0}}">
+    <view class="empty">
+      <view class="empty-emoji">📭</view>
+      <view class="empty-text">还没有纪念卡</view>
+      <view class="empty-tip">完成任务并生成纪念卡后，会出现在这里</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="card-item" wx:for="{{cards}}" wx:key="id">
+      <view class="card-top">
+        <text class="card-name">{{item.name}}</text>
+        <text class="card-privacy">{{item.privacy}}</text>
+      </view>
+      <view class="card-quote">“{{item.quote}}”</view>
+      <view class="card-words">
+        <view class="word">
+          <text class="word-nick">{{item.aNick}}</text>
+          <text class="word-text">{{item.aContent}}</text>
+        </view>
+        <view class="word">
+          <text class="word-nick">{{item.bNick}}</text>
+          <text class="word-text">{{item.bContent}}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <button class="btn-ghost" bindtap="goBack">返回</button>
+</view>

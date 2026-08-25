@@ -37,6 +37,7 @@
     </view>
 
     <button class="btn-primary" bindtap="goTasks">去完成任务 →</button>
+    <button class="btn-ghost" bindtap="goAlbum">私密纪念册 📖</button>
     <button class="link-btn" bindtap="unbind">解除 CP 关系</button>
   </block>
 </view>
