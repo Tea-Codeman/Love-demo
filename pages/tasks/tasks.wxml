@@ -7,7 +7,7 @@
     <view class="card" wx:for="{{tasks}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
       <view class="task-head">
         <text class="task-name">{{item.name}}</text>
-        <text class="badge badge-{{item.status}}">{{item.status === 'done' ? '已完成' : (item.status === 'doing' ? '进行中' : '待开始')}}</text>
+        <text class="badge badge-{{item.status}}">{{item.reminded ? '等待TA回应' : (item.status === 'done' ? '已完成' : (item.status === 'doing' ? '进行中' : '待开始'))}}</text>
       </view>
       <view class="task-desc">{{item.desc}}</view>
       <view class="progress">

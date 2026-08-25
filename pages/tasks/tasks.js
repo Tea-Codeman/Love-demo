@@ -1,4 +1,4 @@
-const { ensureTasks, getCP } = require('../../utils/store');
+const { ensureTasks, getCP, getReminders } = require('../../utils/store');
 
 Page({
   data: {
@@ -11,7 +11,11 @@ Page({
       this.setData({ bound: false, tasks: [] });
       return;
     }
-    this.setData({ bound: true, tasks: ensureTasks() });
+    const reminders = getReminders();
+    const tasks = ensureTasks().map(t => Object.assign({}, t, {
+      reminded: !!reminders.find(r => r.taskId === t.id && r.status === 'pending')
+    }));
+    this.setData({ bound: true, tasks });
   },
   goDetail(e) {
     const id = e.currentTarget.dataset.id;

@@ -227,6 +227,46 @@ test('完成任务并归档后，纪念册出现该卡片', () => {
   eq(album.data.cards[0].bNick, '小红');
 });
 
+// ---------------- M8 提醒同步 ----------------
+moduleStart('M8 提醒同步 (pages/task-detail / tasks)');
+resetStorage();
+test('remindTA 创建 pending 提醒并标记任务', () => {
+  bindWithNames('小明', '小红');
+  const detail = loadPage(P('pages/task-detail/task-detail.js'));
+  detail.onLoad({ id: 't_goodnight' });
+  detail.onAInput({ detail: { value: '晚安' } }); detail.completeA(); // A 完成，等待 B
+  detail.remindTA();
+  const reminders = wx.getStorageSync('cp_reminders');
+  ok(Array.isArray(reminders) && reminders.length === 1, '应写入 1 条提醒');
+  eq(reminders[0].status, 'pending');
+  eq(reminders[0].taskId, 't_goodnight');
+  eq(detail.data.reminded, true, '详情页应标记 reminded');
+  const tasks = loadPage(P('pages/tasks/tasks.js'));
+  tasks.onShow();
+  const t = tasks.data.tasks.find(x => x.id === 't_goodnight');
+  eq(t.reminded, true, '任务列表应显示等待TA回应');
+});
+test('模拟 TA 回应后：B 完成、进度更新、提醒转 responded', () => {
+  const detail = loadPage(P('pages/task-detail/task-detail.js'));
+  detail.onLoad({ id: 't_goodnight' });
+  detail.simulateResponse();
+  eq(detail.data.task.bDone, true, 'TA 应完成');
+  eq(detail.data.task.progress, 100, '双方完成应为 100%');
+  eq(detail.data.reminded, false);
+  const reminders = wx.getStorageSync('cp_reminders');
+  eq(reminders[0].status, 'responded');
+});
+test('解除绑定后提醒被清空', () => {
+  const bind = loadPage(P('pages/bind/bind.js'));
+  bind.onCreate();
+  const detail = loadPage(P('pages/task-detail/task-detail.js'));
+  detail.onLoad({ id: 't_goodnight' });
+  detail.remindTA();
+  const index = loadPage(P('pages/index/index.js'));
+  index.unbind(); // showModal 模拟返回 confirm=true
+  eq(wx.getStorageSync('cp_reminders'), '', 'cp_reminders 应被清除');
+});
+
 // ---------------- 汇总 ----------------
 console.log('\n========================================');
 console.log('通过 ' + pass + ' 项，失败 ' + fail + ' 项');

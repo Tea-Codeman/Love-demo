@@ -15,6 +15,8 @@
     <view class="role-title">TA（B）的晚安 · 本机模拟</view>
     <textarea class="ta" placeholder="模拟 TA 写下的晚安…" value="{{bText}}" bindinput="onBInput" disabled="{{task.bDone}}"></textarea>
     <button class="btn-primary" bindtap="completeB" disabled="{{task.bDone}}">{{task.bDone ? '✓ TA 已完成' : '模拟 TA 完成'}}</button>
+    <button wx:if="{{task.aDone && !task.bDone}}" class="btn-ghost" bindtap="simulateResponse">模拟 TA 回应 💞</button>
+    <view wx:if="{{reminded}}" class="hint">已提醒 TA，等待回应中…</view>
   </view>
 
   <view class="card">
@@ -22,7 +24,7 @@
       <view class="progress-bar" style="width:{{task.progress}}%"></view>
     </view>
     <view class="task-foot" style="margin-top:12rpx;">{{task.progress}}% 完成</view>
-    <button class="btn-go" bindtap="remindTA" disabled="{{task.bDone}}">提醒 TA</button>
+    <button class="btn-go" bindtap="remindTA" disabled="{{task.bDone || reminded}}">{{reminded ? '已提醒 TA' : '提醒 TA'}}</button>
   </view>
 
   <button class="btn-go" bindtap="goComplete" disabled="{{!bothDone}}">查看奖励 & 生成纪念卡 →</button>

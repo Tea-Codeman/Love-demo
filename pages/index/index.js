@@ -1,4 +1,4 @@
-const { getCP, getTasks } = require('../../utils/store');
+const { getCP, getTasks, clearReminders } = require('../../utils/store');
 const app = getApp();
 
 function loveDays(createdAt) {
@@ -42,6 +42,7 @@ Page({
         if (r.confirm) {
           wx.removeStorageSync('cp_info');
           wx.removeStorageSync('cp_tasks');
+          clearReminders();
           app.globalData.cp = null;
           this.setData({ cp: null, loveDays: 0, doneCount: 0 });
         }

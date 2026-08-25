@@ -1,11 +1,12 @@
-const { getTaskById, saveTask } = require('../../utils/store');
+const { getTaskById, saveTask, getReminderByTask, addReminder, respondReminder } = require('../../utils/store');
 
 Page({
   data: {
     task: null,
     aText: '',
     bText: '',
-    bothDone: false
+    bothDone: false,
+    reminded: false
   },
   onLoad(options) {
     const task = getTaskById(options.id);
@@ -13,7 +14,8 @@ Page({
       task,
       aText: task.aContent || '',
       bText: task.bContent || '',
-      bothDone: task.aDone && task.bDone
+      bothDone: task.aDone && task.bDone,
+      reminded: !!getReminderByTask(options.id)
     });
     wx.setNavigationBarTitle({ title: task.name });
   },
@@ -55,7 +57,27 @@ Page({
     }
   },
   remindTA() {
-    wx.showToast({ title: '已提醒 TA（演示）', icon: 'none' });
+    const task = this.data.task;
+    if (task.progress === 100) {
+      wx.showToast({ title: '任务已完成啦', icon: 'none' });
+      return;
+    }
+    addReminder(task.id);
+    this.setData({ reminded: true });
+    wx.showToast({ title: '已提醒 TA 💌', icon: 'none' });
+  },
+  // 本机模拟「TA 在另一台设备完成了 TA 的部分」并触发同步
+  simulateResponse() {
+    const task = this.data.task;
+    if (task.bDone) {
+      wx.showToast({ title: 'TA 已经完成了', icon: 'none' });
+      return;
+    }
+    task.bDone = true;
+    if (!task.bContent) task.bContent = '收到～我来啦';
+    respondReminder(task.id);
+    this.setData({ reminded: false });
+    this.afterUpdate(task);
   },
   goComplete() {
     wx.redirectTo({ url: '/pages/complete/complete?id=' + this.data.task.id });

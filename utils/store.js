@@ -3,6 +3,7 @@
 
 const CP_KEY = 'cp_info';
 const TASKS_KEY = 'cp_tasks';
+const REMINDERS_KEY = 'cp_reminders';
 const { TASK_TEMPLATES } = require('./constants');
 
 function getCP() {
@@ -59,6 +60,43 @@ function saveTask(task) {
   setTasks(tasks);
 }
 
+// ---------------- 提醒同步（PR-05，本机模拟） ----------------
+// reminder: { taskId, remindedAt, status: 'pending' | 'responded' }
+function getReminders() {
+  return wx.getStorageSync(REMINDERS_KEY) || [];
+}
+
+function getReminderByTask(taskId) {
+  return getReminders().find(r => r.taskId === taskId) || null;
+}
+
+function addReminder(taskId) {
+  const list = getReminders();
+  const existing = list.find(r => r.taskId === taskId);
+  if (existing) {
+    existing.remindedAt = new Date().toISOString();
+    existing.status = 'pending';
+  } else {
+    list.push({ taskId, remindedAt: new Date().toISOString(), status: 'pending' });
+  }
+  wx.setStorageSync(REMINDERS_KEY, list);
+  return getReminderByTask(taskId);
+}
+
+function respondReminder(taskId) {
+  const list = getReminders();
+  const r = list.find(x => x.taskId === taskId);
+  if (r) {
+    r.status = 'responded';
+    wx.setStorageSync(REMINDERS_KEY, list);
+  }
+  return r;
+}
+
+function clearReminders() {
+  wx.removeStorageSync(REMINDERS_KEY);
+}
+
 module.exports = {
   getCP,
   setCP,
@@ -66,5 +104,10 @@ module.exports = {
   setTasks,
   ensureTasks,
   getTaskById,
-  saveTask
+  saveTask,
+  getReminders,
+  getReminderByTask,
+  addReminder,
+  respondReminder,
+  clearReminders
 };
