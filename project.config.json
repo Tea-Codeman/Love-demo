@@ -4,7 +4,9 @@
   "libVersion": "trial",
   "isGameTourist": false,
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "type": "folder", "value": "scripts" }
+    ],
     "include": []
   },
   "setting": {
