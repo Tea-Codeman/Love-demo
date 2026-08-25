@@ -110,10 +110,16 @@ view, text, button, input, textarea, picker {
   background: #fff6f8;
   border: 2rpx solid #ffd9e1;
   border-radius: 16rpx;
-  padding: 20rpx;
   font-size: 28rpx;
 }
+.input {
+  /* 固定高度 + 行高 = 内容高度，保证占位符与输入文字垂直居中 */
+  padding: 0 20rpx;
+  height: 88rpx;
+  line-height: 84rpx;
+}
 .ta {
+  padding: 20rpx;
   height: 140rpx;
 }
 .picker {
