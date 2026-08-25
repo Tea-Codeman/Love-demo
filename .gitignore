@@ -1,0 +1,12 @@
+# 微信开发者工具私有配置（本地专属，不应提交）
+project.private.config.json
+
+# 依赖
+node_modules/
+
+# 系统/编辑器
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
