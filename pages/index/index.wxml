@@ -1,28 +1,42 @@
-<!--index.wxml-->
-<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF"></navigation-bar>
-<scroll-view class="scrollarea" scroll-y type="list">
-  <view class="container">
-    <view class="userinfo">
-      <block wx:if="{{canIUseNicknameComp && !hasUserInfo}}">
-        <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
-          <image class="avatar" src="{{userInfo.avatarUrl}}"></image>
-        </button>
-        <view class="nickname-wrapper">
-          <text class="nickname-label">昵称</text>
-          <input type="nickname" class="nickname-input" placeholder="请输入昵称" bind:change="onInputChange" />
-        </view>
-      </block>
-      <block wx:elif="{{!hasUserInfo}}">
-        <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
-        <view wx:else> 请使用2.10.4及以上版本基础库 </view>
-      </block>
-      <block wx:else>
-        <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-        <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-      </block>
+<view class="page">
+  <!-- 未绑定：引导建立关系 -->
+  <block wx:if="{{!cp}}">
+    <view class="hero">
+      <view class="hero-emoji">💞</view>
+      <view class="hero-title">遇见、成长、记录</view>
+      <view class="hero-sub">让爱更有趣</view>
     </view>
-    <view class="usermotto">
-      <text class="user-motto">{{motto}}</text>
+    <button class="btn-primary bind-btn" bindtap="goBind">建立 CP 关系</button>
+  </block>
+
+  <!-- 已绑定：成长空间 -->
+  <block wx:else>
+    <view class="cp-card card">
+      <view class="cp-avatars">
+        <view class="avatar">{{cp.selfNick[0]}}</view>
+        <view class="heart">❤</view>
+        <view class="avatar partner">{{cp.partnerNick[0]}}</view>
+      </view>
+      <view class="cp-names">{{cp.selfNick}} & {{cp.partnerNick}}</view>
+      <view class="cp-days">已经在一起 {{loveDays}} 天</view>
     </view>
-  </view>
-</scroll-view>
+
+    <view class="stats card">
+      <view class="stat">
+        <view class="stat-num">{{cp.intimacy}}</view>
+        <view class="stat-label">亲密度</view>
+      </view>
+      <view class="stat">
+        <view class="stat-num">{{cp.growth}}</view>
+        <view class="stat-label">成长值</view>
+      </view>
+      <view class="stat">
+        <view class="stat-num">{{doneCount}}</view>
+        <view class="stat-label">完成任务</view>
+      </view>
+    </view>
+
+    <button class="btn-primary" bindtap="goTasks">去完成任务 →</button>
+    <button class="link-btn" bindtap="unbind">解除 CP 关系</button>
+  </block>
+</view>

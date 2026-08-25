@@ -1,19 +1,11 @@
-// app.js
-App({
-  onLaunch() {
-    // 展示本地存储能力
-    const logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+const { getCP } = require('./utils/store');
 
-    // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-      }
-    })
-  },
+App({
   globalData: {
-    userInfo: null
+    cp: null
+  },
+  onLaunch() {
+    // 启动时把本机 CP 信息读入全局，方便各页面快速取用
+    this.globalData.cp = getCP();
   }
-})
+});

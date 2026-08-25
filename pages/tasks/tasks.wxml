@@ -1,0 +1,19 @@
+<view class="page">
+  <block wx:if="{{!bound}}">
+    <view class="card" style="text-align:center;color:#999;">请先在首页建立 CP 关系</view>
+  </block>
+
+  <block wx:else>
+    <view class="card" wx:for="{{tasks}}" wx:key="id" bindtap="goDetail" data-id="{{item.id}}">
+      <view class="task-head">
+        <text class="task-name">{{item.name}}</text>
+        <text class="badge badge-{{item.status}}">{{item.status === 'done' ? '已完成' : (item.status === 'doing' ? '进行中' : '待开始')}}</text>
+      </view>
+      <view class="task-desc">{{item.desc}}</view>
+      <view class="progress">
+        <view class="progress-bar" style="width:{{item.progress}}%"></view>
+      </view>
+      <view class="task-foot">进度 {{item.progress}}%</view>
+    </view>
+  </block>
+</view>

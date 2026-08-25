@@ -1,0 +1,29 @@
+<view class="page" wx:if="{{task && cp}}">
+  <!-- 纪念卡预览（拍立得风） -->
+  <view class="polaroid">
+    <view class="polaroid-head">{{cp.selfNick}} ❤ {{cp.partnerNick}}</view>
+    <view class="polaroid-body">
+      <view class="quote">“{{quote}}”</view>
+      <view class="meta">完成任务《{{task.name}}》</view>
+      <view class="meta">已经在一起 {{loveDays}} 天</view>
+    </view>
+    <view class="polaroid-foot">CP 纪念卡 · {{privacyOptions[privacyIndex]}}</view>
+  </view>
+
+  <!-- 编辑区 -->
+  <view class="card">
+    <view class="field">
+      <text class="label">纪念金句</text>
+      <textarea class="ta" value="{{quote}}" bindinput="onQuoteInput" maxlength="40"></textarea>
+    </view>
+    <view class="field">
+      <text class="label">分享权限</text>
+      <picker mode="selector" range="{{privacyOptions}}" value="{{privacyIndex}}" bindchange="onPrivacyChange">
+        <view class="picker">{{privacyOptions[privacyIndex]}} ▾</view>
+      </picker>
+    </view>
+  </view>
+
+  <button class="btn-primary" open-type="share">分享给好友</button>
+  <button class="btn-go" bindtap="finish">保存到私密纪念册</button>
+</view>

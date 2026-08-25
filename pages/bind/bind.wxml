@@ -1,0 +1,17 @@
+<view class="page">
+  <view class="card">
+    <view class="hero-title" style="text-align:center;color:#ff6b81;font-size:36rpx;font-weight:700;margin-bottom:12rpx;">建立 CP 关系</view>
+    <view class="task-desc" style="text-align:center;">本机演示版：在本地模拟「对方」。输入你们俩的昵称即可开始共同任务。</view>
+
+    <view class="field" style="margin-top:32rpx;">
+      <text class="label">我的昵称</text>
+      <input class="input" placeholder="例如：小爱" value="{{selfNick}}" bindinput="onInputSelf" />
+    </view>
+    <view class="field">
+      <text class="label">TA 的昵称</text>
+      <input class="input" placeholder="例如：小天" value="{{partnerNick}}" bindinput="onInputPartner" />
+    </view>
+
+    <button class="btn-primary" bindtap="onCreate">确认绑定</button>
+  </view>
+</view>

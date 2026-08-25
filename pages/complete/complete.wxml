@@ -1,0 +1,18 @@
+<view class="page complete-page" wx:if="{{task}}">
+  <view class="confetti">🎉</view>
+  <view class="complete-title">任务完成！</view>
+
+  <view class="reward-card card">
+    <view class="reward-row">
+      <text>亲密度</text>
+      <text class="plus">+{{task.reward.intimacy}}</text>
+    </view>
+    <view class="reward-row">
+      <text>成长值</text>
+      <text class="plus">+{{task.reward.growth}}</text>
+    </view>
+    <view class="reward-total">当前：亲密度 {{intimacy}} · 成长值 {{growth}}</view>
+  </view>
+
+  <button class="btn-primary" bindtap="goCard">生成我的 CP 纪念卡 →</button>
+</view>

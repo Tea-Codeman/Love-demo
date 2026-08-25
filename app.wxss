@@ -1,10 +1,243 @@
-/**app.wxss**/
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
+/* ===== 全局基础 ===== */
+page {
+  background: #fff5f7;
+  font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+  color: #333;
+  font-size: 28rpx;
+}
+view, text, button, input, textarea, picker {
   box-sizing: border-box;
-} 
+}
+.page {
+  min-height: 100vh;
+  padding: 24rpx 0 60rpx;
+}
+
+/* ===== 通用卡片 ===== */
+.card {
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  margin: 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 129, 0.10);
+}
+
+/* ===== 主按钮 ===== */
+.btn-primary {
+  background: #ff6b81;
+  color: #fff;
+  border-radius: 999rpx;
+  font-size: 32rpx;
+  padding: 22rpx 0;
+  margin: 24rpx;
+  border: none;
+  line-height: 1.4;
+}
+.btn-primary::after { border: none; }
+.btn-primary[disabled] {
+  background: #ffc2cc;
+  color: #fff;
+}
+
+/* ===== 次按钮 / 链接 ===== */
+.btn-go {
+  background: #fff;
+  color: #ff6b81;
+  border: 2rpx solid #ff6b81;
+  border-radius: 999rpx;
+  font-size: 30rpx;
+  padding: 20rpx 0;
+  margin: 16rpx 24rpx;
+  line-height: 1.4;
+}
+.btn-go::after { border: none; }
+.btn-go[disabled] { color: #ccc; border-color: #eee; }
+.link-btn {
+  background: transparent;
+  color: #999;
+  font-size: 26rpx;
+  margin-top: 8rpx;
+}
+.link-btn::after { border: none; }
+
+/* ===== 进度条 ===== */
+.progress {
+  width: 100%;
+  height: 16rpx;
+  background: #ffe3e9;
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #ff8fa3, #ff6b81);
+  border-radius: 999rpx;
+  transition: width .4s ease;
+}
+
+/* ===== 表单 ===== */
+.field {
+  margin-bottom: 24rpx;
+}
+.label {
+  display: block;
+  font-size: 26rpx;
+  color: #888;
+  margin-bottom: 12rpx;
+}
+.input, .ta {
+  width: 100%;
+  background: #fff6f8;
+  border: 2rpx solid #ffd9e1;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+}
+.ta {
+  height: 140rpx;
+}
+.picker {
+  background: #fff6f8;
+  border: 2rpx solid #ffd9e1;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  color: #ff6b81;
+}
+
+/* ===== 任务列表项 ===== */
+.task-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.task-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+.task-desc {
+  font-size: 26rpx;
+  color: #888;
+  margin: 12rpx 0;
+  line-height: 1.5;
+}
+.task-foot {
+  font-size: 24rpx;
+  color: #bbb;
+  margin-top: 12rpx;
+}
+.badge {
+  font-size: 22rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 999rpx;
+}
+.badge-todo { background: #f0f0f0; color: #999; }
+.badge-doing { background: #fff0d6; color: #e6a23c; }
+.badge-done { background: #ffe3e9; color: #ff6b81; }
+
+/* ===== 角色标题 ===== */
+.role-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #ff6b81;
+  margin-bottom: 16rpx;
+}
+.mode {
+  font-size: 24rpx;
+  color: #ff6b81;
+  background: #fff0f3;
+  display: inline-block;
+  padding: 8rpx 16rpx;
+  border-radius: 12rpx;
+  margin-top: 12rpx;
+}
+
+/* ===== 首页 ===== */
+.hero {
+  text-align: center;
+  padding: 80rpx 0 40rpx;
+}
+.hero-emoji { font-size: 96rpx; }
+.hero-title { font-size: 44rpx; font-weight: 700; margin-top: 16rpx; color: #ff6b81; }
+.hero-sub { font-size: 28rpx; color: #999; margin-top: 8rpx; }
+.bind-btn { margin-top: 60rpx; }
+.cp-card { text-align: center; }
+.cp-avatars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24rpx;
+  margin-bottom: 16rpx;
+}
+.avatar {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: #ff6b81;
+  color: #fff;
+  font-size: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar.partner { background: #ffa6b5; }
+.heart { color: #ff6b81; font-size: 40rpx; }
+.cp-names { font-size: 34rpx; font-weight: 600; }
+.cp-days { font-size: 26rpx; color: #999; margin-top: 8rpx; }
+.stats {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+}
+.stat-num { font-size: 40rpx; font-weight: 700; color: #ff6b81; }
+.stat-label { font-size: 24rpx; color: #999; margin-top: 6rpx; }
+
+/* ===== 完成页 ===== */
+.complete-page { text-align: center; padding-top: 80rpx; }
+.confetti { font-size: 100rpx; }
+.complete-title { font-size: 44rpx; font-weight: 700; color: #ff6b81; margin: 16rpx 0 32rpx; }
+.reward-card { text-align: left; }
+.reward-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 30rpx;
+  padding: 12rpx 0;
+}
+.plus { color: #ff6b81; font-weight: 700; }
+.reward-total { font-size: 24rpx; color: #999; margin-top: 12rpx; }
+
+/* ===== 纪念卡（拍立得风） ===== */
+.polaroid {
+  background: #fff;
+  margin: 24rpx;
+  padding: 24rpx 24rpx 0;
+  border-radius: 12rpx;
+  box-shadow: 0 12rpx 30rpx rgba(0,0,0,0.12);
+}
+.polaroid-head {
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #ff6b81;
+  padding: 12rpx 0;
+}
+.polaroid-body {
+  background: linear-gradient(135deg, #ffe3e9, #fff0f3);
+  border-radius: 12rpx;
+  padding: 60rpx 32rpx;
+  text-align: center;
+  min-height: 320rpx;
+}
+.quote {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #d6485f;
+  line-height: 1.6;
+}
+.meta { font-size: 24rpx; color: #b06; opacity: .7; margin-top: 24rpx; }
+.polaroid-foot {
+  text-align: center;
+  font-size: 22rpx;
+  color: #aaa;
+  padding: 20rpx 0;
+}
