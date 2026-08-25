@@ -303,6 +303,45 @@ test('清空事件后列表为空', () => {
   eq(a.data.empty, true);
 });
 
+// ---------------- M10 生成兜底 ----------------
+moduleStart('M10 生成兜底 (pages/card)');
+resetStorage();
+test('内容缺失的已完成任务，finish 自动补齐金句与双方内容', () => {
+  bindWithNames('小明', '小红');
+  // 直接写入一个「已完成但内容为空」的任务，模拟兜底场景
+  wx.setStorageSync('cp_tasks', [{
+    id: 't_goodnight', name: '今日晚安打卡', desc: '', type: 'parallel', modeText: '',
+    reward: { intimacy: 10, growth: 5 },
+    status: 'done', progress: 100, aDone: true, bDone: true,
+    aContent: '', bContent: '', rewardGiven: true, cardGenerated: false, archived: false
+  }]);
+  const card = loadPage(P('pages/card/card.js'));
+  card.onLoad({ id: 't_goodnight' });
+  card.finish();
+  const stored = wx.getStorageSync('cp_tasks').find(x => x.id === 't_goodnight');
+  ok(stored.cardQuote && stored.cardQuote.length > 0, '兜底应补齐金句');
+  ok(stored.aContent && stored.aContent.length > 0, '兜底应补齐 A 内容');
+  ok(stored.bContent && stored.bContent.length > 0, '兜底应补齐 B 内容');
+  eq(stored.archived, true, '仍应归档');
+});
+test('正常内容不被兜底覆盖', () => {
+  resetStorage();
+  bindWithNames('小明', '小红');
+  const detail = loadPage(P('pages/task-detail/task-detail.js'));
+  detail.onLoad({ id: 't_goodnight' });
+  detail.onAInput({ detail: { value: '我的晚安' } }); detail.completeA();
+  detail.onBInput({ detail: { value: '你的晚安' } }); detail.completeB();
+  loadPage(P('pages/complete/complete.js')).onLoad({ id: 't_goodnight' });
+  const card = loadPage(P('pages/card/card.js'));
+  card.onLoad({ id: 't_goodnight' });
+  card.onQuoteInput({ detail: { value: '专属金句' } });
+  card.finish();
+  const stored = wx.getStorageSync('cp_tasks').find(x => x.id === 't_goodnight');
+  eq(stored.cardQuote, '专属金句', '应保留用户输入的金句');
+  eq(stored.aContent, '我的晚安');
+  eq(stored.bContent, '你的晚安');
+});
+
 // ---------------- 汇总 ----------------
 console.log('\n========================================');
 console.log('通过 ' + pass + ' 项，失败 ' + fail + ' 项');

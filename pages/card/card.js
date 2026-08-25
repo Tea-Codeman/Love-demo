@@ -37,12 +37,22 @@ Page({
   },
   finish() {
     const task = this.data.task;
-    task.cardQuote = this.data.quote;
+    // 生成兜底：金句或双方内容缺失时自动补齐，保证始终能生成一张完整纪念卡
+    const quote = (this.data.quote && this.data.quote.trim()) || task.cardQuote || '今天也要一起加油呀 💕';
+    task.cardQuote = quote;
     task.cardPrivacy = this.data.privacyOptions[this.data.privacyIndex];
+    if (!task.aContent) task.aContent = '（留白也是一种浪漫）';
+    if (!task.bContent) task.bContent = '（留白也是一种浪漫）';
     task.cardGenerated = true;
     task.archived = true;
     saveTask(task);
-    logEvent('card_generated', { id: task.id, name: task.name, quote: task.cardQuote, privacy: task.cardPrivacy });
+    logEvent('card_generated', {
+      id: task.id,
+      name: task.name,
+      quote,
+      privacy: task.cardPrivacy,
+      fallback: !this.data.quote || !task.aContent || !task.bContent
+    });
     wx.showToast({ title: '已归档私密纪念册', icon: 'success' });
     setTimeout(() => wx.navigateBack(), 900);
   },
